@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ChainNova | Self-Healing Logistics</title>
+<!-- BEGIN: External Resources -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/lib/index.min.js"></script>
+<!-- END: External Resources -->
+<!-- BEGIN: Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0d93f2',
+            darkBg: '#0b111a',
+            cardBg: '#161f2c',
+            borderGray: '#242f3f',
+            accentGreen: '#10b981',
+            accentRed: '#ef4444',
+            accentOrange: '#f59e0b',
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '8px',
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Tailwind Configuration -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="global-styles">
+    body {
+      background-color: #0b111a;
+      color: #e2e8f0;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+    .glass-effect {
+      background: rgba(22, 31, 44, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #242f3f;
+      border-radius: 10px;
+    }
+    .page-transition {
+      transition: opacity 0.3s ease-in-out;
+    }
+    .hidden-page {
+      display: none;
+    }
+  </style>
+<style data-purpose="dashboard-charts">
+    .bar-chart-item {
+      transition: height 0.5s ease-out;
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="font-sans">
+<!-- BEGIN: App Container -->
+<div class="relative min-h-screen flex flex-col max-w-md mx-auto border-x border-borderGray bg-darkBg" id="app">
+<!-- BEGIN: Top Navigation Header -->
+<header class="sticky top-0 z-50 px-4 py-3 flex items-center justify-between border-b border-borderGray glass-effect" id="main-header">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<svg class="text-white" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+</div>
+<h1 class="text-lg font-bold tracking-tight">ChainNova</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-primary text-xs font-semibold px-3 py-2 rounded-custom flex items-center gap-1" id="create-btn" onclick="navigateTo('create-shipment')">
+<svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+          Create
+        </button>
+<button class="w-10 h-10 rounded-full border border-borderGray flex items-center justify-center relative">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+<span class="absolute top-2 right-2 w-2 h-2 bg-accentRed rounded-full border-2 border-darkBg"></span>
+</button>
+</div>
+</header>
+<!-- END: Top Navigation Header -->
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 pb-24 page-transition">
+<!-- PAGE: DASHBOARD -->
+<section class="p-4 space-y-6" id="page-dashboard">
+<div data-purpose="greeting">
+<p class="text-primary text-xs font-medium uppercase tracking-widest">Logistics Overview</p>
+<h2 class="text-2xl font-bold mt-1">Good morning, Commander</h2>
+</div>
+<div class="flex p-1 bg-borderGray/50 rounded-custom">
+<button class="flex-1 py-1.5 text-xs font-semibold bg-cardBg rounded-custom shadow-sm">Real-time</button>
+<button class="flex-1 py-1.5 text-xs font-semibold text-slate-500">Past 24h</button>
+</div>
+<!-- Metric Cards -->
+<div class="grid grid-cols-1 gap-4">
+<div class="p-4 bg-cardBg rounded-custom border border-borderGray relative overflow-hidden">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="13" width="15" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+</div>
+<span class="text-accentGreen text-xs font-bold flex items-center"><svg class="mr-1" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> 12%</span>
+</div>
+<p class="text-slate-400 text-xs mt-3">Total Shipments</p>
+<p class="text-2xl font-bold">1,284</p>
+</div>
+<div class="p-4 bg-cardBg rounded-custom border border-borderGray">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>
+</div>
+<span class="text-accentGreen text-xs font-bold flex items-center"><svg class="mr-1" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> 5%</span>
+</div>
+<p class="text-slate-400 text-xs mt-3">Active Shipments</p>
+<p class="text-2xl font-bold">432</p>
+</div>
+<div class="p-4 bg-cardBg rounded-custom border border-accentRed/30 relative">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-accentRed/10 rounded-lg text-accentRed">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
+</div>
+<span class="text-accentRed bg-accentRed/10 px-2 py-0.5 rounded text-[10px] font-bold uppercase">High Priority</span>
+</div>
+<p class="text-slate-400 text-xs mt-3">Delay Risk Alerts</p>
+<p class="text-2xl font-bold text-accentRed">12</p>
+</div>
+</div>
+<!-- Volume Chart -->
+<div class="p-5 bg-cardBg rounded-custom border border-borderGray">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-bold">Shipment Volume</h3>
+<p class="text-slate-400 text-[10px]">Weekly tracking of inbound vs outbound</p>
+</div>
+<select class="bg-borderGray text-[10px] border-none rounded-md py-1 px-2 focus:ring-0">
+<option>Last 7 Days</option>
+</select>
+</div>
+<div class="flex items-end justify-between h-32 gap-2 px-2">
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-slate-700/30 rounded-t-sm h-16"></div>
+<span class="text-[8px] text-slate-500 font-bold uppercase">Mon</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-slate-700/30 rounded-t-sm h-24"></div>
+<span class="text-[8px] text-slate-500 font-bold uppercase">Tue</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-slate-700/30 rounded-t-sm h-20"></div>
+<span class="text-[8px] text-slate-500 font-bold uppercase">Wed</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary rounded-t-sm h-full"></div>
+<span class="text-[8px] text-primary font-bold uppercase">Thu</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-slate-700/30 rounded-t-sm h-18"></div>
+<span class="text-[8px] text-slate-500 font-bold uppercase">Fri</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-slate-700/30 rounded-t-sm h-12"></div>
+<span class="text-[8px] text-slate-500 font-bold uppercase">Sat</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-slate-700/30 rounded-t-sm h-8"></div>
+<span class="text-[8px] text-slate-500 font-bold uppercase">Sun</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="space-y-4">
+<div class="flex justify-between items-end px-1">
+<h3 class="font-bold">Recent Activity</h3>
+<a class="text-primary text-[10px] font-bold" href="#">View All</a>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="w-0.5 bg-accentGreen/50 rounded-full h-10 mt-1"></div>
+<div>
+<p class="text-sm font-semibold">Shipment #3920 delivered</p>
+<p class="text-xs text-slate-500">Chennai Port Hub • 2m ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-0.5 bg-accentRed/50 rounded-full h-10 mt-1"></div>
+<div>
+<p class="text-sm font-semibold">Chennai Port delays: NH45 Congestion</p>
+<p class="text-xs text-slate-500">Route: Chennai → Coimbatore • 14m ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-0.5 bg-primary/50 rounded-full h-10 mt-1"></div>
+<div>
+<p class="text-sm font-semibold">New shipment dispatched</p>
+<p class="text-xs text-slate-500">Madurai Distribution Center • 45m ago</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- PAGE: SHIPMENTS -->
+<section class="hidden-page p-4 space-y-4" id="page-shipments">
+<div class="relative">
+<input class="w-full bg-cardBg border-borderGray rounded-custom text-sm py-3 pl-10 pr-4 focus:ring-primary focus:border-primary" placeholder="Search Shipment ID, origin, destination" type="text"/>
+<svg class="absolute left-3 top-3.5 text-slate-500" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+<button class="bg-primary text-white text-xs font-bold px-5 py-2.5 rounded-full shrink-0">All</button>
+<button class="bg-cardBg text-slate-300 text-xs font-bold px-5 py-2.5 border border-borderGray rounded-full shrink-0 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span> In Transit
+          </button>
+<button class="bg-cardBg text-slate-300 text-xs font-bold px-5 py-2.5 border border-borderGray rounded-full shrink-0 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-accentOrange"></span> Delayed
+          </button>
+<button class="bg-cardBg text-slate-300 text-xs font-bold px-5 py-2.5 border border-borderGray rounded-full shrink-0 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-accentGreen"></span> Delivered
+          </button>
+</div>
+<h3 class="text-[10px] font-bold tracking-widest text-slate-500 uppercase mt-4 mb-2">Active Shipments</h3>
+<!-- Shipment Card 1 -->
+<div class="p-4 bg-cardBg border border-borderGray rounded-custom space-y-4" onclick="navigateTo('tracking')">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+</div>
+<div>
+<p class="text-[10px] text-slate-500 font-bold">#3920</p>
+<p class="text-lg font-bold">8.5 tons</p>
+</div>
+</div>
+<span class="bg-primary/20 text-primary text-[10px] font-bold px-2 py-1 rounded uppercase">In Transit</span>
+</div>
+<div class="flex justify-between items-center px-2">
+<div>
+<p class="text-[10px] text-slate-500 mb-1 uppercase">Origin</p>
+<p class="text-sm font-bold">Coimbatore, TN</p>
+</div>
+<svg class="text-slate-600" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+<div class="text-right">
+<p class="text-[10px] text-slate-500 mb-1 uppercase">Destination</p>
+<p class="text-sm font-bold">Tuticorin, TN</p>
+</div>
+</div>
+<div class="pt-4 border-t border-borderGray/50 flex justify-between items-center text-[10px] text-slate-500">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-slate-700 rounded-full flex items-center justify-center">
+<svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</div>
+</div>
+<p>ETA: Oct 24, 04:30 PM</p>
+</div>
+</div>
+<!-- Shipment Card 2 (Delayed) -->
+<div class="p-4 bg-cardBg border border-accentOrange/30 rounded-custom space-y-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-accentOrange/10 rounded-lg flex items-center justify-center text-accentOrange">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
+</div>
+<div>
+<p class="text-[10px] text-slate-500 font-bold">#3925</p>
+<p class="text-lg font-bold">12.2 tons</p>
+</div>
+</div>
+<span class="bg-accentOrange/20 text-accentOrange text-[10px] font-bold px-2 py-1 rounded uppercase">Delayed</span>
+</div>
+<div class="flex justify-between items-center px-2">
+<div>
+<p class="text-[10px] text-slate-500 mb-1 uppercase">Origin</p>
+<p class="text-sm font-bold">Chennai, TN</p>
+</div>
+<svg class="text-slate-600" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+<div class="text-right">
+<p class="text-[10px] text-slate-500 mb-1 uppercase">Destination</p>
+<p class="text-sm font-bold">Coimbatore, TN</p>
+</div>
+</div>
+<div class="pt-4 border-t border-borderGray/50 flex justify-between items-center text-[10px]">
+<div class="flex items-center gap-1.5 text-accentOrange font-bold">
+<svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              Traffic Delay (+2h)
+            </div>
+<p class="text-slate-500">ETA: Oct 23, 11:15 PM</p>
+</div>
+</div>
+</section>
+<!-- PAGE: CREATE SHIPMENT -->
+<section class="hidden-page p-4 space-y-6" id="page-create-shipment">
+<div class="flex items-center gap-4 mb-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-borderGray text-slate-300" onclick="navigateTo('dashboard')">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="19" x2="5" y1="12" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+</button>
+<h2 class="text-xl font-bold">Create New Shipment</h2>
+</div>
+<div class="space-y-4">
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-slate-500 uppercase">Origin Facility</label>
+<select class="w-full bg-cardBg border-borderGray rounded-custom text-sm p-3 focus:ring-primary">
+<option>Chennai Port Hub - TN-01</option>
+<option>Coimbatore Logistics Park</option>
+<option>Madurai Distribution Center</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-slate-500 uppercase">Destination</label>
+<input class="w-full bg-cardBg border-borderGray rounded-custom text-sm p-3 focus:ring-primary" placeholder="Enter delivery address in TN" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-slate-500 uppercase">Load Type</label>
+<select class="w-full bg-cardBg border-borderGray rounded-custom text-sm p-3 focus:ring-primary">
+<option>Dry Cargo</option>
+<option>Refrigerated</option>
+<option>Hazardous</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-slate-500 uppercase">Weight (Tons)</label>
+<input class="w-full bg-cardBg border-borderGray rounded-custom text-sm p-3 focus:ring-primary" placeholder="0.0" step="0.1" type="number"/>
+</div>
+</div>
+</div>
+<div class="p-4 bg-primary/5 border border-primary/20 rounded-custom">
+<div class="flex gap-3">
+<div class="w-8 h-8 shrink-0 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+</div>
+<div>
+<p class="text-xs font-bold text-primary">AI Optimization Enabled</p>
+<p class="text-[10px] text-slate-400 mt-0.5">We will automatically find the best route and identify potential dead-space sharing opportunities.</p>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary py-4 rounded-custom font-bold text-sm shadow-lg shadow-primary/20" onclick="navigateTo('dead-space')">Analyze &amp; Create</button>
+</section>
+<!-- PAGE: DEAD SPACE OPTIMIZATION -->
+<section class="hidden-page p-4 space-y-6" id="page-dead-space">
+<div class="flex items-center gap-4 mb-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-borderGray text-slate-300" onclick="navigateTo('create-shipment')">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="19" x2="5" y1="12" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+</button>
+<h2 class="text-xl font-bold">Cargo Optimization</h2>
+</div>
+<div class="bg-cardBg border border-borderGray rounded-custom overflow-hidden">
+<div class="p-4 border-b border-borderGray flex justify-between items-center">
+<span class="text-xs font-bold uppercase text-slate-500">Proposed Match</span>
+<span class="text-accentGreen text-[10px] font-bold px-2 py-0.5 bg-accentGreen/10 rounded">94% Efficiency Match</span>
+</div>
+<div class="p-5 space-y-4">
+<div class="flex justify-between items-center">
+<div>
+<p class="text-xs text-slate-400">Your Cargo</p>
+<p class="text-lg font-bold">8.5 Tons</p>
+</div>
+<div class="text-primary">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-400">Available Space</p>
+<p class="text-lg font-bold">12.0 Tons</p>
+</div>
+</div>
+<div class="relative h-4 bg-slate-800 rounded-full overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-primary w-[70%]"></div>
+<div class="absolute inset-y-0 left-[70%] bg-accentGreen/50 w-[20%]"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold">
+<span class="text-primary uppercase">Your Load</span>
+<span class="text-accentGreen uppercase">Co-Loader Match</span>
+<span class="text-slate-600 uppercase">Dead Space</span>
+</div>
+</div>
+<div class="bg-primary/5 p-4 flex justify-between items-center border-t border-borderGray">
+<p class="text-xs font-medium">Estimated Savings:</p>
+<p class="text-accentGreen font-bold">₹4,200 (18%)</p>
+</div>
+</div>
+<div class="space-y-3">
+<h3 class="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Co-Loader Details</h3>
+<div class="p-3 bg-cardBg border border-borderGray rounded-custom flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">JS</div>
+<div>
+<p class="text-xs font-bold">J. Smith Logistics</p>
+<p class="text-[10px] text-slate-500">Route overlap: 85%</p>
+</div>
+</div>
+<button class="text-primary text-[10px] font-bold underline">Profile</button>
+</div>
+</div>
+<button class="w-full bg-primary py-4 rounded-custom font-bold text-sm" onclick="navigateTo('route-opt')">Accept Match &amp; Optimize Route</button>
+</section>
+<!-- PAGE: ROUTE OPTIMIZATION (AI ALTERNATE) -->
+<section class="hidden-page p-4 space-y-6" id="page-route-opt">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-bold">Route Optimization</h2>
+<span class="bg-accentRed/10 text-accentRed text-[10px] font-bold px-2 py-0.5 rounded">Alert: NH-45 Blockage</span>
+</div>
+<!-- Fake Map View -->
+<div class="h-64 bg-slate-800 rounded-custom relative overflow-hidden border border-borderGray">
+<div class="absolute inset-0 opacity-20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVy6QHakP4amC6S22vAjj09areJZ91snyQOBq4eNyZbMP7UTyOmg6ZzJmEHXoFTEHrFbuLbSKwq0USVGE3cQuaETwavNoMn3NQ6y3V9pCX8vGAI4VqqRpEAoYW14xSdvdmMHCc3fGTt5exlV4f9hIdmO2JHH4Bec60IBC1e4QzyPsDd4DJdOJqLw8L7BPpG5hi5yKDHLaVByIkl7CyEoOvMdMtm1l8u_LuBg_W7-BIIJvRw0R8wAgzJ2nhhllSwUGuPWPh22o_GBM'); background-size: cover;"></div>
+<!-- Route lines (CSS simple visual) -->
+<svg class="absolute inset-0 w-full h-full">
+<path d="M50,180 L150,150 L280,100" fill="none" stroke="#ef4444" stroke-dasharray="5,5" stroke-width="3"></path>
+<path d="M50,180 L120,220 L220,200 L280,100" fill="none" stroke="#0d93f2" stroke-width="4"></path>
+<!-- Nodes -->
+<circle cx="50" cy="180" fill="#0d93f2" r="6"></circle>
+<circle cx="280" cy="100" fill="#0d93f2" r="6"></circle>
+<rect fill="#ef4444" height="20" rx="4" transform="rotate(45 150 150)" width="20" x="140" y="140"></rect>
+</svg>
+<div class="absolute top-4 left-4 glass-effect p-2 rounded text-[10px] font-bold border border-borderGray">
+<p>Chennai Port → Coimbatore</p>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
+            AI RECOMMENDED
+          </div>
+</div>
+<div class="space-y-4">
+<div class="p-4 bg-cardBg border-l-4 border-primary rounded-r-custom space-y-1">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-bold text-primary uppercase">Optimized Path (Via Salem)</span>
+<span class="text-accentGreen text-[10px] font-bold">+0 mins delay</span>
+</div>
+<p class="text-sm font-semibold">Self-healed route identified to bypass congestion at Vikravandi Toll Plaza.</p>
+<div class="flex gap-4 pt-2 text-[10px] text-slate-500">
+<span class="flex items-center gap-1"><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Secure</span>
+<span class="flex items-center gap-1"><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Fuel efficient</span>
+</div>
+</div>
+<div class="p-4 bg-cardBg/50 border border-borderGray rounded-custom opacity-50">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-bold text-slate-500 uppercase">Original Path (Via Ulundurpet)</span>
+<span class="text-accentRed text-[10px] font-bold">+145 mins delay</span>
+</div>
+<p class="text-sm font-semibold text-slate-400">Heavy congestion detected. Not recommended.</p>
+</div>
+</div>
+<button class="w-full bg-primary py-4 rounded-custom font-bold text-sm" onclick="navigateTo('dashboard')">Deploy Shipment</button>
+</section>
+<!-- PAGE: TRACKING DETAIL -->
+<section class="hidden-page p-4 space-y-6" id="page-tracking">
+<div class="flex items-center gap-4 mb-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-borderGray text-slate-300" onclick="navigateTo('shipments')">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="19" x2="5" y1="12" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+</button>
+<div>
+<h2 class="text-lg font-bold">Shipment #3920</h2>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Live Tracking</p>
+</div>
+</div>
+<div class="bg-cardBg rounded-custom border border-borderGray overflow-hidden">
+<div class="h-48 bg-slate-800 relative">
+<div class="absolute inset-0 opacity-30" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_Yq-FL2_YILJC7aH0J09fVNU6rQUxUTbVJaKNVWutEorl0m86G1GVX4e4bScJSPdFnVZGS2F7JpWDDP4z-BhrHqdW_lowQw6G95Wdck0j8ZSJprowgM2A2omKPP_c6uQ45c8ge-Qoa5th-XM0lZht1z1RJscFcrxMKseHwwGHY_o_pGGL-2PBQciR-4ZzhplZ2DrAbTxLRBnlSze18ZgecLE4m3bVgsLS5eNWpg28hTN9dhsveC8bURfmWzZwlWgjGR4xSf7oXtY'); background-size: cover;"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<div class="w-6 h-6 bg-primary rounded-full animate-ping absolute opacity-50"></div>
+<div class="w-6 h-6 bg-primary rounded-full relative flex items-center justify-center shadow-lg shadow-primary/40">
+<svg class="text-white" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+</div>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex justify-between items-center">
+<div>
+<p class="text-xs text-slate-500">Current Speed</p>
+<p class="text-lg font-bold">58 km/h</p>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-500">Temperature (Cargo)</p>
+<p class="text-lg font-bold">4°C <span class="text-accentGreen text-xs">Optimum</span></p>
+</div>
+</div>
+<div class="p-3 bg-accentRed/10 border border-accentRed/20 rounded-lg flex items-start gap-3">
+<svg class="text-accentRed mt-0.5" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
+<div>
+<p class="text-xs font-bold text-accentRed">AI Alert: Predicted Route Delay</p>
+<p class="text-[10px] text-slate-400 leading-tight">Accident detected on NH-7 ahead. Self-healing protocol suggests switching to SH-49 in 12km.</p>
+<button class="mt-2 bg-accentRed text-white text-[10px] font-bold px-3 py-1.5 rounded uppercase">Accept New Route</button>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Timeline</h3>
+<div class="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:bg-borderGray">
+<div class="relative">
+<div class="absolute -left-6 top-1.5 w-4 h-4 rounded-full bg-primary border-4 border-darkBg"></div>
+<p class="text-xs font-bold">Departed Chennai Port Hub</p>
+<p class="text-[10px] text-slate-500">Oct 23, 08:12 AM</p>
+</div>
+<div class="relative opacity-60">
+<div class="absolute -left-6 top-1.5 w-4 h-4 rounded-full bg-borderGray border-4 border-darkBg"></div>
+<p class="text-xs font-bold">Arrive at Salem Transit</p>
+<p class="text-[10px] text-slate-500">Scheduled: Oct 23, 01:45 PM</p>
+</div>
+</div>
+</div>
+</section>
+<!-- PAGE: PITCH / ABOUT -->
+<section class="hidden-page p-6 space-y-8" id="page-pitch">
+<div class="text-center space-y-4">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto text-primary">
+<svg fill="none" height="32" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+</div>
+<h2 class="text-3xl font-bold italic tracking-tighter">ChainNova</h2>
+<p class="text-slate-400">The Self-Healing Logistics Infrastructure for the Next-Gen Global Supply Chain.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-cardBg border border-borderGray rounded-custom">
+<p class="text-2xl font-bold text-primary">01</p>
+<h4 class="text-xs font-bold mt-2 uppercase">Self-Healing</h4>
+<p class="text-[10px] text-slate-500 mt-1">Autonomous route correction during disruption.</p>
+</div>
+<div class="p-4 bg-cardBg border border-borderGray rounded-custom">
+<p class="text-2xl font-bold text-accentGreen">02</p>
+<h4 class="text-xs font-bold mt-2 uppercase">Dead Space</h4>
+<p class="text-[10px] text-slate-500 mt-1">AI matches empty cargo space to co-loaders.</p>
+</div>
+</div>
+<div class="bg-primary/10 p-6 rounded-custom border border-primary/20 space-y-4">
+<h3 class="font-bold text-center">Problem We Solve</h3>
+<p class="text-xs text-center text-slate-300 italic">"Global supply chains lose $2.4B annually due to reactive routing and unutilized cargo space."</p>
+<div class="pt-4 border-t border-primary/20">
+<div class="flex justify-between text-[10px] font-bold uppercase mb-1">
+<span>Efficiency Gains</span>
+<span class="text-accentGreen">+34%</span>
+</div>
+<div class="w-full bg-slate-800 h-1.5 rounded-full">
+<div class="bg-accentGreen h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary py-4 rounded-custom font-bold text-sm" onclick="navigateTo('dashboard')">Experience the Future</button>
+</section>
+</main>
+<!-- END: Main Content Area -->
+<!-- BEGIN: Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md border-t border-borderGray glass-effect flex justify-around py-3 px-2 z-50">
+<button class="flex flex-col items-center gap-1 group text-primary" id="nav-dashboard" onclick="navigateTo('dashboard')">
+<svg class="group-hover:scale-110 transition-transform" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+<span class="text-[9px] font-bold uppercase">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 group text-slate-500" id="nav-shipments" onclick="navigateTo('shipments')">
+<svg class="group-hover:scale-110 transition-transform" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="13" width="15" x="1" y="3"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+<span class="text-[9px] font-bold uppercase">Shipments</span>
+</button>
+<div class="relative -top-6">
+<button class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/40 border-4 border-darkBg hover:scale-110 transition-transform" onclick="navigateTo('create-shipment')">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 group text-slate-500" id="nav-pitch" onclick="navigateTo('pitch')">
+<svg class="group-hover:scale-110 transition-transform" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path></svg>
+<span class="text-[9px] font-bold uppercase">About</span>
+</button>
+<button class="flex flex-col items-center gap-1 group text-slate-500">
+<svg class="group-hover:scale-110 transition-transform" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+<span class="text-[9px] font-bold uppercase">Config</span>
+</button>
+</nav>
+<!-- END: Bottom Navigation Bar -->
+</div>
+<!-- END: App Container -->
+<!-- BEGIN: Navigation Logic -->
+<script data-purpose="routing">
+    const pages = [
+      'page-dashboard', 
+      'page-shipments', 
+      'page-create-shipment', 
+      'page-dead-space', 
+      'page-route-opt',
+      'page-tracking',
+      'page-pitch'
+    ];
+
+    function navigateTo(target) {
+      // Logic mapping
+      const mapping = {
+        'dashboard': 'page-dashboard',
+        'shipments': 'page-shipments',
+        'create-shipment': 'page-create-shipment',
+        'dead-space': 'page-dead-space',
+        'route-opt': 'page-route-opt',
+        'tracking': 'page-tracking',
+        'pitch': 'page-pitch'
+      };
+
+      const targetPageId = mapping[target];
+
+      // Hide all pages
+      pages.forEach(p => {
+        document.getElementById(p).classList.add('hidden-page');
+      });
+
+      // Show target page
+      const activePage = document.getElementById(targetPageId);
+      activePage.classList.remove('hidden-page');
+      
+      // Update UI active states
+      updateNavState(target);
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    function updateNavState(target) {
+      const navItems = ['nav-dashboard', 'nav-shipments', 'nav-pitch'];
+      navItems.forEach(id => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        if (id.includes(target)) {
+          el.classList.remove('text-slate-500');
+          el.classList.add('text-primary');
+        } else {
+          el.classList.remove('text-primary');
+          el.classList.add('text-slate-500');
+        }
+      });
+
+      // Header visibility logic
+      const header = document.getElementById('main-header');
+      if (['tracking', 'create-shipment', 'dead-space', 'route-opt', 'pitch'].includes(target)) {
+        header.classList.add('hidden');
+      } else {
+        header.classList.remove('hidden');
+      }
+    }
+    
+    // Initial Route
+    window.onload = () => navigateTo('dashboard');
+  </script>
+<!-- END: Navigation Logic -->
+</body></html>

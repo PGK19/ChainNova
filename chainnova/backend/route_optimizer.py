@@ -1,10 +1,15 @@
-def suggest_route(delay_risk):
+def optimize_route(data):
 
-    if delay_risk == "High Risk":
-        return "Use Alternate Route: OMR"
-    
-    elif delay_risk == "Medium Risk":
-        return "Adjust delivery schedule"
+    traffic = data["traffic"]
 
+    if traffic > 70:
+        route = "Alternate Highway Route"
+        time_saved = "25 minutes"
     else:
-        return "Route OK"
+        route = "Primary Route"
+        time_saved = "5 minutes"
+
+    return {
+        "recommended_route": route,
+        "estimated_time_saved": time_saved
+    }

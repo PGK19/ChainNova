@@ -1,12 +1,18 @@
-import random
+import pickle
+import numpy as np
 
-def predict_delay(distance, traffic):
-    
-    risk_score = distance * 0.5 + traffic * 0.5
-    
-    if risk_score > 50:
-        return "High Delay Risk"
-    elif risk_score > 30:
-        return "Medium Risk"
-    else:
-        return "Low Risk"
+model = pickle.load(open("../ai_model/delay_prediction.pkl", "rb"))
+
+def predict_delay(data):
+
+    distance = data["distance"]
+    traffic = data["traffic"]
+    weather = data["weather"]
+
+    input_data = np.array([[distance, traffic, weather]])
+
+    prediction = model.predict(input_data)[0]
+
+    return {
+        "delay_risk": int(prediction)
+    }
