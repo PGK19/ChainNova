@@ -1,15 +1,14 @@
 def optimize_route(data):
-
-    traffic = data["traffic"]
-
-    if traffic > 70:
-        route = "Alternate Highway Route"
-        time_saved = "25 minutes"
-    else:
-        route = "Primary Route"
-        time_saved = "5 minutes"
-
+    # Mock route optimization
+    # In real implementation, this would use actual routing algorithms
+    
+    origin = data.get("origin", "")
+    destination = data.get("destination", "")
+    
+    # Mock optimization result
     return {
-        "recommended_route": route,
-        "estimated_time_saved": time_saved
+        "optimized_route": f"Via Salem bypass",
+        "original_route": f"Direct {origin} to {destination}",
+        "time_saved": "25 minutes",
+        "reason": "Bypasses congestion at Vikravandi Toll Plaza"
     }

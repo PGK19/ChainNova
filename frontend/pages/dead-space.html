@@ -1,0 +1,26 @@
+<!-- PAGE: DEAD SPACE OPTIMIZATION -->
+<section class="p-4 space-y-6" id="page-dead-space">
+<div class="flex items-center gap-4 mb-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-borderGray text-slate-300" onclick="navigateTo('create-shipment')">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="19" x2="5" y1="12" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+</button>
+<h2 class="text-xl font-bold">Cargo Optimization</h2>
+</div>
+<div class="bg-cardBg border border-borderGray rounded-custom overflow-hidden" id="cargo-match-result">
+<!-- Cargo match result will be loaded here -->
+</div>
+<div class="space-y-3">
+<h3 class="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Co-Loader Details</h3>
+<div class="p-3 bg-cardBg border border-borderGray rounded-custom flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">JS</div>
+<div>
+<p class="text-xs font-bold">J. Smith Logistics</p>
+<p class="text-[10px] text-slate-500">Route overlap: 85%</p>
+</div>
+</div>
+<button class="text-primary text-[10px] font-bold underline">Profile</button>
+</div>
+</div>
+<button class="w-full bg-primary py-4 rounded-custom font-bold text-sm" onclick="navigateTo('route-opt')">Accept Match &amp; Optimize Route</button>
+</section>
