@@ -1,9 +1,23 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+
 from delay_model import predict_delay
 from route_optimizer import optimize_route
 from cargo_matcher import match_cargo
 from database import shipments
+
+app = FastAPI()
+
+class ShipmentInput(BaseModel):
+
+    base_lead_time: int
+    scheduled_time: int
+    weather: int
+    geo_risk: int
+    weight: float
+    mode: int
+    route: int
 
 app = FastAPI(title="ChainNova")
 
@@ -28,9 +42,14 @@ def get_shipments():
     return shipments
 
 # Delay prediction
-@app.post("/api/predict-delay")
-def delay_prediction(data: dict):
-    return predict_delay(data)
+@app.post("/predict-delay")
+def predict(data: ShipmentInput):
+
+    result = predict_delay(data.dict())
+
+    return {
+        "delay_prediction": result
+    }
 
 # Route optimization
 @app.post("/api/optimize-route")

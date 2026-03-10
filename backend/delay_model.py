@@ -1,18 +1,20 @@
-import pickle
+import joblib
 import numpy as np
 
-model = pickle.load(open("../ai_model/delay_prediction.pkl", "rb"))
+model = joblib.load("../ai_model/delay_prediction.pkl")
 
 def predict_delay(data):
 
-    distance = data["distance"]
-    traffic = data["traffic"]
-    weather = data["weather"]
+    features = np.array([[
+        data["base_lead_time"],
+        data["scheduled_time"],
+        data["weather"],
+        data["geo_risk"],
+        data["weight"],
+        data["mode"],
+        data["route"]
+    ]])
 
-    input_data = np.array([[distance, traffic, weather]])
+    prediction = model.predict(features)
 
-    prediction = model.predict(input_data)[0]
-
-    return {
-        "delay_risk": int(prediction)
-    }
+    return int(prediction[0])
