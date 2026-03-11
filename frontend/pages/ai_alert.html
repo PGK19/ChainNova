@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ChainNova - Shipment Tracking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d93f2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101b22",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #223949;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark
+              overflow-x-hidden mx-auto
+              max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl
+              border-x border-slate-200 dark:border-slate-800">
+
+    <header class="sticky top-0 z-10 flex items-center bg-background-light/80 dark:bg-background-dark/80
+                   backdrop-blur-md p-4 md:px-6 md:py-5 justify-between
+                   border-b border-slate-200 dark:border-slate-800">
+        <button class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <div class="flex flex-col items-center flex-1">
+            <h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Shipment #3920</h1>
+            <div class="flex items-center gap-1.5">
+                <span class="size-2 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-primary text-xs font-bold uppercase tracking-widest">In Transit</span>
+            </div>
+        </div>
+        <div class="flex size-10 items-center justify-end">
+            <button class="flex items-center justify-center rounded-full size-10 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                <span class="material-symbols-outlined">more_vert</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto custom-scrollbar pb-24">
+        <div class="p-4 md:p-6">
+            <div class="relative w-full aspect-[16/10] rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg">
+                <div class="absolute inset-0 bg-cover bg-center grayscale contrast-125 opacity-40" data-alt="Stylized map showing logistics route between Coimbatore and Chennai" data-location="Coimbatore to Chennai" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCB0t39dq9MQ4GR2FKoEJ8r8ChU28XcUs0hJtnvmS_RCD7ZIexT1d76eOTBavUH-G0B3pP-zKNuUEaiKgTkvwsUnkWRV7h8zK57egyJsrD7mJd_RuPO1t_vWjLvASPXtPSf5QMLBvQYTrWYfnolqeEWvecXRUcEOI7s4yZ1s073G83ZI5RnRHj4hHUzW1LEfnQGB39SGgmHLwhdde54J00zSuVbUmi5H7hHsxbmBpsJhSLj9l0T3ShjCIhAallXfqKCG-BVtSva38g")'>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="relative w-4/5 h-0.5 bg-primary/30">
+                        <div class="absolute top-1/2 left-0 -translate-y-1/2 size-3 rounded-full bg-slate-400 border-2 border-background-dark"></div>
+                        <div class="absolute top-1/2 left-[65%] -translate-y-1/2 size-4 rounded-full bg-primary border-4 border-primary/30 ring-4 ring-primary/10"></div>
+                        <div class="absolute top-1/2 right-0 -translate-y-1/2 size-3 rounded-full bg-slate-600 border-2 border-background-dark"></div>
+                        <div class="absolute h-full bg-primary left-0 w-[65%]"></div>
+                    </div>
+                </div>
+                <div class="absolute bottom-3 left-3 bg-background-dark/80 backdrop-blur-sm px-2 py-1 rounded text-[10px] text-slate-400 border border-slate-700">
+                    Live GPS: 11.0168° N, 76.9558° E
+                </div>
+            </div>
+        </div>
+
+        <section class="px-4 py-2 md:px-6 md:py-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                <h2 class="text-xl font-bold tracking-tight">AI Tracking Insights</h2>
+                <span class="text-[10px] font-bold py-1 px-2 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase md:mt-0 mt-2">ChainNova AI</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                <div class="flex flex-col gap-2 rounded-xl p-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center gap-2 text-primary">
+                        <span class="material-symbols-outlined text-sm">schedule</span>
+                        <p class="text-slate-600 dark:text-slate-400 text-xs font-medium">Est. Arrival</p>
+                    </div>
+                    <p class="text-slate-900 dark:text-slate-100 text-lg font-bold">Oct 24, 18:30</p>
+                    <p class="text-emerald-500 text-[10px] font-bold flex items-center gap-1 uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-xs">check_circle</span> No Delay
+                    </p>
+                </div>
+                <div class="flex flex-col gap-2 rounded-xl p-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center gap-2 text-primary">
+                        <span class="material-symbols-outlined text-sm">verified_user</span>
+                        <p class="text-slate-600 dark:text-slate-400 text-xs font-medium">Confidence</p>
+                    </div>
+                    <p class="text-slate-900 dark:text-slate-100 text-lg font-bold">98%</p>
+                    <p class="text-primary text-[10px] font-bold uppercase tracking-wider">High Accuracy</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-4 py-6 md:px-6">
+            <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200 dark:border-slate-800 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700/50 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-xl">weight</span>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">Payload Weight</p>
+                            <p class="text-sm font-bold">12,450 kg</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-right">
+                        <div>
+                            <p class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">Vehicle Type</p>
+                            <p class="text-sm font-bold">Heavy EV-Truck</p>
+                        </div>
+                        <div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-xl">local_shipping</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="size-10 rounded-full overflow-hidden border-2 border-primary/20 bg-slate-300">
+                        <img class="w-full h-full object-cover" data-alt="Profile photo of driver" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVL-SMWENK3m_-v3Ynrz8wVmmQMoe8cui38pH3lgMKfrg83_NwOXKpJOHvBpikP9RIgXlJaTcHGp9arcl-0rCO56bmVGovJHl7qTVN_Rk_XK7TnHLrL1AiQ7UysVOvWz8gBwXZkZKUD2Uw9mQOX3hYurZYFoYu0guaQmzSnO9pu4SNhf6RFuKzh2uGFviwz4Kf1wNcZ-2pXVXocKxhybOir0C663ARkGnqTNzb3JoYzEZxSHxAk8_IvCYpkEEttLlN2cgoTZbG3Qs"/>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">Assigned Driver</p>
+                        <p class="text-sm font-bold">Rajesh Kumar <span class="text-[10px] font-normal text-slate-400 ml-1">ID: #DR-882</span></p>
+                    </div>
+                    <button class="size-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
+                        <span class="material-symbols-outlined text-sm">call</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-4 py-2 md:px-6">
+            <h2 class="text-lg font-bold mb-6 tracking-tight">Blockchain Timeline</h2>
+            <div class="relative space-y-8 pl-8">
+                <div class="absolute left-3.5 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-800"></div>
+                <div class="relative">
+                    <div class="absolute -left-8 top-1 size-7 rounded-full bg-primary ring-4 ring-primary/20 flex items-center justify-center text-white z-10">
+                        <span class="material-symbols-outlined text-base">location_on</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold">Current Location - Near Salem</p>
+                        <p class="text-xs text-slate-500">Oct 24, 14:15 • Real-time GPS Sync</p>
+                        <p class="mt-1 text-[10px] text-primary font-mono opacity-60">TX: 0x4f2...a81e</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-8 top-1 size-7 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 z-10">
+                        <span class="material-symbols-outlined text-base">departure_board</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-400">Departed Origin - Coimbatore Hub</p>
+                        <p class="text-xs text-slate-500">Oct 24, 09:30 • Verified by Node #4</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-8 top-1 size-7 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 z-10">
+                        <span class="material-symbols-outlined text-base">layers</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-400">Logged to Blockchain</p>
+                        <p class="text-xs text-slate-500">Oct 23, 21:00 • Smart Contract Initiated</p>
+                        <p class="mt-1 text-[10px] text-slate-600 font-mono">TX: 0x9b1...c22d</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full
+                max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl
+                bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800
+                px-6 py-3 flex items-center justify-between z-20">
+        <a class="flex flex-col items-center gap-1 text-slate-400" href="/pages/dashboard.html">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span class="text-[10px] font-medium uppercase tracking-tighter">Dashboard</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-primary" href="/pages/shipment_management.html">
+            <span class="material-symbols-outlined font-variation-fill">local_shipping</span>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Shipments</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-400" href="/pages/route-opt.html">
+            <span class="material-symbols-outlined">bar_chart</span>
+            <span class="text-[10px] font-medium uppercase tracking-tighter">Report</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span class="text-[10px] font-medium uppercase tracking-tighter">Profile</span>
+        </a>
+    </nav>
+</div>
+</body></html>

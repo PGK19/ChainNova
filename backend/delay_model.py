@@ -15,6 +15,6 @@ def predict_delay(data):
         data["route"]
     ]])
 
-    prediction = model.predict(features)
+    prob = model.predict_proba(features)[0][1]
 
-    return int(prediction[0])
+    return float(prob)
