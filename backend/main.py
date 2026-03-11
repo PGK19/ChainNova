@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+import os
+from fastapi.responses import FileResponse
 
 from delay_model import predict_delay
 from route_optimizer import optimize_route
@@ -27,7 +29,7 @@ app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
 # API routes
 @app.get("/api/")
 def home():
-    return {"message": "ChainNova Supply Chain API Running"}
+    return FileResponse(os.path.join("../frontend", "index.html"))
 
 # Create shipment
 @app.post("/api/create-shipment")
@@ -52,9 +54,16 @@ def predict(data: ShipmentInput):
     }
 
 # Route optimization
+
+class RouteRequest(BaseModel):
+
+    origin: str
+    destination: str
+
 @app.post("/api/optimize-route")
-def route(data: dict):
-    return optimize_route(data)
+def route(data: RouteRequest):
+    result = optimize_route(data.origin, data.destination)
+    return result
 
 # Cargo matching
 @app.post("/api/cargo-match")
